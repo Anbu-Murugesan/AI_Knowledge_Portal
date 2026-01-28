@@ -1,0 +1,39 @@
+# Core Python libs
+feedparser
+beautifulsoup4
+tqdm
+requests
+pydantic
+python-dateutil
+streamlit
+
+# LangChain ecosystem
+langchain
+langchain-community
+langchain-text-splitters
+langchain_core
+langchain-classic
+langgraph
+langchain-groq
+
+# Document loaders
+unstructured
+unstructured-client
+
+# Vector search
+faiss-cpu
+
+# Embeddings (HuggingFace + Sentence Transformers)
+sentence-transformers
+transformers
+
+# Web search
+tavily-python
+
+# Research papers
+arxiv
+
+# FASTAPI backend
+fastapi
+uvicorn[standard]
+
