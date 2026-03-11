@@ -101,6 +101,13 @@ def search_tavily(query: str) -> List[Dict[str, Any]]:
         return events
 
     except Exception as e:
+        error_str = str(e).lower()
+        
+        # Check for API key/quota related errors
+        if any(keyword in error_str for keyword in ["quota", "rate limit", "api key", "exhausted", "limit"]):
+            # Re-raise with more context for better detection
+            raise ValueError(f"Tavily API key exhausted or quota exceeded: {e}")
+        
         print(f"Tavily search failed for query '{query}': {e}")
         return []
 

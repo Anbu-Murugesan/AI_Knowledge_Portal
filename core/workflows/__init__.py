@@ -89,7 +89,7 @@ def run_full_workflow_example(
 
         retriever_node = make_faiss_retriever_tool_from_store(
             rss_faiss_store,
-            k=6
+            k=10
         )
 
     # ---------------------------------------------------

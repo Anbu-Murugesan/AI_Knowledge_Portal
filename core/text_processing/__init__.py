@@ -6,7 +6,7 @@ from datetime import datetime
 from typing import List, Dict, Any, Tuple
 
 from langchain_community.document_loaders import WebBaseLoader
-from langchain_classic.docstore.document import Document
+from langchain_core.documents import Document
 from tqdm import tqdm
 
 # Global metadata map for CSV data

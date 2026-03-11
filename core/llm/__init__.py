@@ -61,10 +61,16 @@ def make_react_agent_node_with_tool(
             "summary": clean_summary
         })
 
+            # Get user's query from state
+            user_query = state.query or ""
+            
+            prompt = f"""You are an expert tech news and blog summarizer.
 
-            prompt = f"""
-You are an expert tech news and blog summarizer.
+USER QUERY: "{user_query}"
+
 STRICT RULES (MANDATORY):
+- Focus ONLY on information relevant to the user's query: "{user_query}"
+- If a source is NOT relevant to the query, SKIP it (don't include in output)
 - Title must be clean, professional mainly for blogs
 - Do NOT include conversational phrases like "Here's the response"
 - Use ONLY the information explicitly present in SOURCES
@@ -72,36 +78,38 @@ STRICT RULES (MANDATORY):
 - Do NOT infer, guess, or add future announcements
 - Do NOT mention model versions unless present in SOURCES
 - Do NOT summarize beyond retrieved content
-- If sources are insufficient, return an empty list
+- If sources are insufficient or irrelevant, return an empty list
 
 TASK:
-For EACH source below:
-- Understand the topic
-STRICT RULE:
-- Use the title EXACTLY as provided for your undertsing
-- rephrase, summarize, or rewrite titles just small title
-- Do NOT prepend numbers or headings to titles
+For EACH source below that is RELEVANT to the user query "{user_query}":
+- Check if the source discusses topics related to "{user_query}"
+- If NOT relevant, SKIP this source entirely
+- If relevant, extract key information about "{user_query}"
+- Generate key bullet points that specifically address "{user_query}"
 
-- Generate key bullet points covering the main aspects
+STRICT RULE:
+- Use the title EXACTLY as provided for your understanding
+- Rephrase, summarize, or rewrite titles just small title
+- Do NOT prepend numbers or headings to titles
 
 STRICT RULES:
 - Output must be a SINGLE valid JSON ARRAY
-- ONE object per source
+- ONE object per RELEVANT source only
 - Each object MUST contain:
   - title
   - link
   - key_points
-- key_points must contain 3–5 concise bullets
+- key_points must contain 3–5 concise bullets focused on "{user_query}"
 - Do NOT merge sources
 - Do NOT add extra text
+- If no sources are relevant, return an empty array []
 
 JSON FORMAT:
 [
   {{
     "title": "<title>",
     "link": "<url>",
-    "key_points": ["point 1", "point 2", "point 3"]
-
+    "key_points": ["point 1 about {user_query}", "point 2 about {user_query}", "point 3 about {user_query}"]
   }}
 ]
 

@@ -1,11 +1,14 @@
 import os
 from typing import List, Dict, Any, Callable, Optional
-from langchain_classic.vectorstores import FAISS
-from langchain_classic.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_classic.docstore.document import Document
+from langchain_core.documents import Document
 
 from ..models import WorkflowState
+from ..logging_config import get_vector_store_logger
+
+logger = get_vector_store_logger()
 
 # Configuration
 EMBEDDING_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
@@ -23,18 +26,23 @@ text_splitter = RecursiveCharacterTextSplitter(chunk_size=CHUNK_SIZE, chunk_over
 
 
 def build_faiss_from_docs_and_save(documents: List[Document], index_dir: str, model_name: str) -> FAISS:
+    logger.info(f"Building FAISS index from {len(documents)} documents, saving to {index_dir}")
     split_docs = text_splitter.split_documents(documents)
     if not split_docs:
+        logger.error("No split documents to index")
         raise RuntimeError("No split documents to index.")
+    logger.debug(f"Split documents into {len(split_docs)} chunks")
     for d in split_docs:
         d.metadata["title"] = (d.metadata.get("title") or "").strip()
         d.metadata["link"] = (d.metadata.get("link") or "").strip()
         if not d.metadata.get("summary"):
             d.metadata["summary"] = (clean_text(d.page_content)[:300]).strip()
+    logger.debug(f"Loading embeddings model: {model_name}")
     embeddings = HuggingFaceEmbeddings(model_name=model_name)
     store = FAISS.from_documents(split_docs, embeddings)
     os.makedirs(index_dir, exist_ok=True)
     store.save_local(index_dir)
+    logger.info(f"FAISS index saved successfully to {index_dir}")
     return store
 
 
@@ -143,7 +151,7 @@ def make_faiss_retriever_tool_from_store(
         try:
             docs = call_get_relevant_documents(query)
 
-            print("[DEBUG] docs returned:", len(docs))
+            logger.debug(f"Retrieved {len(docs)} documents from vector store for query: '{query[:50]}...'")
 
             state.retrieved_docs = []
 

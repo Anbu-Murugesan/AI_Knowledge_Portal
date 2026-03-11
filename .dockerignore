@@ -1,0 +1,119 @@
+# Python cache and compiled files
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+.env
+*.egg
+
+# Virtual environments
+env/
+venv/
+.venv/
+ENV/
+
+# Build and distribution
+build/
+dist/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+
+# Logs (will be mounted as volumes)
+logs/
+*.log
+
+# Environment files (will be passed via environment variables)
+.env
+.env.local
+.env.*.local
+.env.example
+
+# Git files
+.git/
+.gitignore
+.gitattributes
+
+# Docker files (not needed inside containers)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation (not needed in containers)
+*.md
+README.md
+docs/
+DEPLOYMENT*.md
+DOCKER*.md
+LOGGING*.md
+
+
+# Temporary and cache files
+*.tmp
+*.temp
+.cache/
+*.cache
+
+# Vector stores (will be mounted as volumes)
+faiss_index_local/
+kdnuggets_faiss/
+faiss_blogs/
+
+# Cache and status files (will be mounted as volumes)
+events_cache.json
+events_cache*.json
+rebuild_status.json
+
+# Data files (CSV, etc.)
+*.csv
+ai_rss_results.csv
+
+# Presentation files
+*.pptx
+*.ppt
+Internal_AI_Knowledge_Portal*.pptx
+
+
+# Project configuration (not needed in containers)
+pyproject.toml
+setup.py
+setup.cfg
+MANIFEST.in
+
+# Development and utility scripts
+run_langraph_rss.py
+main.py
+pages/
+
+# Backup and duplicate files
+*_save.json
+*(1).json
+*(2).json
+*.bak
+*.backup
+
+# HuggingFace and model caches
+.cache/
+.cache/huggingface/
+.cache/transformers/
+.cache/sentence_transformers/
+~/.cache/
